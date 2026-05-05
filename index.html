@@ -109,7 +109,18 @@
   .mwho { font-size: 9px; color: var(--muted); margin-top: 4px; margin-bottom: 1px; font-weight: 500; }
 
   .day-note { font-size: 10px; color: var(--amber); padding: 7px 14px 10px; border-top: 1px solid var(--amber-border); background: var(--amber-bg); font-style: italic; }
-  .empty { text-align: center; padding: 3rem 1rem; color: var(--muted); font-size: 13px; font-style: italic; }
+  .bucket-card { background: var(--white); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; margin-bottom: 0; }
+  .bucket-header { padding: 14px 16px 10px; border-bottom: 1px solid var(--border); background: var(--subtle); }
+  .bucket-title { font-size: 13px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; }
+  .bucket-item { display: flex; align-items: center; gap: 12px; padding: 13px 16px; border-bottom: 1px solid var(--border); cursor: pointer; user-select: none; transition: background 0.1s; }
+  .bucket-item:last-child { border-bottom: none; }
+  .bucket-item:active { background: var(--subtle); }
+  .bucket-check { width: 22px; height: 22px; border-radius: 50%; border: 1.5px solid var(--border2); flex-shrink: 0; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+  .bucket-item.done .bucket-check { background: #2a8a50; border-color: #2a8a50; }
+  .bucket-item.done .bucket-check::after { content: '✓'; color: white; font-size: 12px; font-weight: 600; }
+  .bucket-item.done .bucket-text { text-decoration: line-through; color: var(--muted); }
+  .bucket-text { font-size: 15px; font-weight: 500; color: var(--text); }
+  .bucket-sub { font-size: 11px; color: var(--muted); margin-top: 2px; }
 
   .legend { display: none; /* hidden for now, keep for later */ 
   .li { display: flex; align-items: center; gap: 5px; font-size: 10px; color: var(--muted); }
@@ -127,6 +138,7 @@
   <div class="city-tabs">
     <div class="city-tab active" onclick="switchCity('miami',this)">🌴 Miami</div>
     <div class="city-tab" onclick="switchCity('sf',this)">🌉 San Francisco</div>
+    <div class="city-tab" onclick="switchCity('bucket',this)">⭐ Bucket List</div>
   </div>
 </div>
 
@@ -144,6 +156,7 @@
 
 <div id="s-miami" class="main"></div>
 <div id="s-sf"    class="main section-hidden"></div>
+<div id="s-bucket" class="main section-hidden"></div>
 
 <div class="legend">
   <div class="li"><div class="ld" style="background:var(--sara)"></div>Sara</div>
@@ -160,14 +173,10 @@ const S=['130g P','106–150g C','41–60g F','1,300–1,640 kcal'];
 const J=['198g P','~330g C','~90g F','3,000 kcal'];
 
 const MIAMI=[
-  {date:8,wd:'Friday',tags:['flight','wsara'],note:'⚠️ Update exact BCN→MIA flight times when confirmed — blocks assume ~15:30 departure.',blocks:[
+  {date:8,wd:'Friday',tags:['flight','wsara'],blocks:[
     {t:'12:00',title:'Pack & final prep',sub:'Last chance to sort bags before leaving',who:'both',type:'leisure'},
-    {t:'13:30',title:'Leave home for El Prat',sub:'30 min buffer for taxi/transport',who:'both',type:'flight'},
-    {t:'14:30',title:'Arrive T1 · bag drop',sub:'Check in luggage, boarding passes ready',who:'both',type:'flight'},
-    {t:'15:00',title:'Security & gate',sub:'Through security, find the gate',who:'both',type:'flight'},
-    {t:'15:30',title:'Light meal at airport',sub:'Eat before boarding — easy to digest',who:'both',type:'food',sm:S,jm:J},
-    {t:'~16:30',title:'Flight BCN → MIA departs',sub:'Approx. 10h flight ⚠️ confirm!',who:'both',type:'flight'},
-    {t:'~22:30',title:'Arrive Miami (local time)',sub:'Immigration · bags · get to accommodation',who:'both',type:'flight'},
+    {t:'14:00',title:'Leave home for El Prat',sub:'Allow time for taxi + check-in',who:'both',type:'flight'},
+    {t:'~16:30',title:'Flight BCN → MIA departs',sub:'Approx. 10h · arrives ~10:30 PM Miami time ⚠️ confirm!',who:'both',type:'flight'},
   ]},
   {date:9,wd:'Saturday',tags:['social','free'],blocks:[
     {t:'~01:00',title:'Arrive & settle in',sub:"Unpack minimally, crash — it's late!",who:'both',type:'leisure'},
@@ -209,7 +218,7 @@ const MIAMI=[
     {t:'07:00',title:'Jaime breakfast',sub:'Self-service · at desk',who:'jaime',type:'food',jm:J},
     {t:'09:00',title:'Sara: free morning',sub:'Last Miami day — errands, pack for SF',who:'sara',type:'leisure'},
     {t:'09:30',title:'Sara breakfast',sub:'Relaxed pace',who:'sara',type:'food',sm:S},
-    {t:'10:00',title:'Sara — Yin Yoga or Bike with Jaime 🧘‍♀️🚴',sub:'Tap to open yoga video',who:'sara',type:'workout',url:'https://youtu.be/19XtFKLXRfg'},
+    {t:'10:00',title:'Sara — Yin Yoga or Bike with Jaime 🧘‍♀️🚴',sub:'Tap to open yoga video',who:'sara',type:'workout',url:'https://www.youtube.com/watch?v=J8vj0H0L2Uw'},
     {t:'13:00',title:'Jaime — Bike',sub:'1.5–2h ride 🚴',who:'jaime',type:'workout'},
     {t:'10:30',title:'Tanning session',sub:'Min. 30 min · last Miami sun!',who:'sara',type:'leisure'},
     {t:'13:00',title:'Lunch at home',sub:'Sara cooks',who:'both',type:'food',sm:S,jm:J},
@@ -219,27 +228,27 @@ const MIAMI=[
   ]},
   {date:13,wd:'Wednesday',tags:['flight'],blocks:[
     {t:'07:00',title:'Breakfast & pack',sub:'Last Miami morning — quick before leaving',who:'both',type:'food',sm:S,jm:J},
-    {t:'08:00',title:'Sara — Gym · Guns 💪',sub:'1.5h session — flight not till 17:37!',who:'sara',type:'workout'},
+    {t:'08:00',title:'Sara — Gym · Guns 💪',sub:'1.5h session — flight not till 5:37 PM!',who:'sara',type:'workout'},
     {t:'09:00',title:'Jaime — Gym',sub:'60 min strength session 🏋️',who:'jaime',type:'workout'},
-    {t:'14:00',title:'Leave for MIA airport',sub:'Uber/taxi to terminal',who:'both',type:'flight'},
-    {t:'15:00',title:'Bag drop & security MIA',sub:'Check in bags, through security · AA 2035',who:'both',type:'flight'},
-    {t:'17:37',title:'Flight MIA → SFO departs',sub:'AA 2035 · Economy (B)',who:'both',type:'flight'},
-    {t:'15:30 🇪🇸',title:'Anima con Nuria Basi',sub:'Meeting · Spain time = 06:30 Pacific — in-flight!',who:'sara',type:'meeting',note:'Call is during the flight — check if WiFi works or reschedule'},
+    {t:'14:00',title:'Leave for MIA airport',sub:'Allow time for check-in & security · AA 2035',who:'both',type:'flight'},
+    {t:'17:37',title:'Flight MIA → SFO departs',sub:'AA 2035 · arrives 8:56 PM SF time',who:'both',type:'flight'},
+    {t:'15:30 🇪🇸',title:'Anima con Nuria Basi',sub:'Meeting · Spain time = 6:30 AM Pacific — in-flight!',who:'sara',type:'meeting',note:'Check if WiFi works on the plane or reschedule'},
   ]},
 ];
 
 const SF=[
   {date:13,wd:'Wednesday',tags:['flight'],blocks:[
     {t:'20:56',title:'Arrive SFO · settle in',sub:'Domestic — no immigration. Get to place!',who:'both',type:'flight'},
-    {t:'~21:30',title:'First SF dinner — outside',sub:'Welcome to San Francisco! Late arrival — keep it simple',who:'both',type:'food'},
+    {t:'21:30',title:'First SF dinner — outside',sub:'Late arrival — keep it simple',who:'both',type:'food'},
   ]},
   {date:14,wd:'Thursday',tags:['wjaime','free'],blocks:[
-    {t:'04:00',title:'Jaime work begins',sub:'8h · 04:00–12:00 SF = 13:00–21:00 Spain',who:'jaime',type:'work'},
+    {t:'04:00',title:'Jaime work begins',sub:'8h · 4:00–12:00 SF = 1:00–9:00 PM Spain',who:'jaime',type:'work'},
     {t:'05:00',title:'Jaime breakfast',sub:'Self-service · pre-dawn hustle',who:'jaime',type:'food',jm:J},
     {t:'09:30',title:'Sara breakfast',sub:'Relaxed first full SF morning',who:'sara',type:'food',sm:S},
-    {t:'10:00',title:'Sara — Yin Yoga or Bike with Jaime 🧘‍♀️🚴',sub:'Tap to open yoga video',who:'sara',type:'workout',url:'https://youtu.be/sTANio_2E0Q'},
+    {t:'10:00',title:'Sara — Yin Yoga or Bike with Jaime 🧘‍♀️🚴',sub:'Tap to open yoga video',who:'sara',type:'workout',url:'https://www.youtube.com/watch?v=J8vj0H0L2Uw'},
     {t:'13:00',title:'Jaime — Bike',sub:'1.5–2h ride 🚴',who:'jaime',type:'workout'},
     {t:'10:30',title:'Tanning session',sub:'Min. 30 min · SF weather is moody — grab it!',who:'sara',type:'leisure'},
+    {t:'11:00',title:'⚠️ Book Yosemite bus!',sub:'extranomical.com — day trip for Sat May 16',who:'both',type:'social',note:'Books up fast — do this today!'},
     {t:'11:00',title:'Sara: free day',sub:'Explore SF solo, recover from travel',who:'sara',type:'leisure'},
     {t:'12:00',title:'Jaime work ends',sub:'8h complete',who:'jaime',type:'work'},
     {t:'13:00',title:'Lunch at home',sub:'Sara cooks · together',who:'both',type:'food',sm:S,jm:J},
@@ -247,7 +256,7 @@ const SF=[
     {t:'20:00',title:'Dinner at home',sub:'Sara cooks',who:'both',type:'food',sm:S,jm:J},
   ]},
   {date:15,wd:'Friday',tags:['wjaime','social'],blocks:[
-    {t:'04:00',title:'Jaime work begins',sub:'8h · 04:00–12:00 SF = 13:00–21:00 Spain',who:'jaime',type:'work'},
+    {t:'04:00',title:'Jaime work begins',sub:'8h · 4:00–12:00 SF = 1:00–9:00 PM Spain',who:'jaime',type:'work'},
     {t:'05:00',title:'Jaime breakfast',sub:'Self-service',who:'jaime',type:'food',jm:J},
     {t:'09:30',title:'Sara breakfast',sub:'',who:'sara',type:'food',sm:S},
     {t:'10:00',title:'Sara — Gym · Legs 🦵',sub:'1.5h session',who:'sara',type:'workout'},
@@ -256,19 +265,17 @@ const SF=[
     {t:'11:00',title:'Sara: see David or Moustafa',sub:'Morning catch-up while Jaime works',who:'sara',type:'social'},
     {t:'12:00',title:'Jaime work ends',sub:'8h complete',who:'jaime',type:'work'},
     {t:'13:00',title:'Lunch at home',sub:'Sara cooks',who:'both',type:'food',sm:S,jm:J},
-    {t:'15:00',title:'TGIF — plans with David/Moustafa?',sub:'Bring them into the afternoon',who:'both',type:'social'},
+    {t:'14:30',title:'Alcatraz 🏝',sub:'Ferry from Pier 33 · audio tour · ~3h total',who:'both',type:'tourism'},
+    {t:'18:00',title:'Fisherman\'s Wharf',sub:'Clam chowder bread bowl 🍞 after Alcatraz',who:'both',type:'tourism'},
     {t:'20:00',title:'Dinner out',sub:'Friday outside meal — make it a good one!',who:'both',type:'food'},
   ]},
   {date:16,wd:'Saturday',tags:['social','free'],blocks:[
-    {t:'09:00',title:'Jaime breakfast',sub:'Self-service · weekend sleep in',who:'jaime',type:'food',jm:J},
-    {t:'09:30',title:'Sara breakfast',sub:'',who:'sara',type:'food',sm:S},
-    {t:'10:00',title:'Sara — Run',sub:'40 min easy run 🏃‍♀️',who:'sara',type:'workout'},
-    {t:'13:00',title:'Jaime — Bike',sub:'1.5–2h ride 🚴',who:'jaime',type:'workout'},
-    {t:'10:30',title:'Tanning session',sub:'Min. 30 min',who:'sara',type:'leisure'},
-    {t:'12:30',title:'Lunch out',sub:'Weekend outside meal — with friends?',who:'both',type:'food'},
-    {t:'14:30',title:'Golden Gate Bridge 🌁',sub:'Walk the bridge + views from Battery Spencer',who:'both',type:'tourism'},
-    {t:'17:00',title:'Sausalito by ferry ⛴',sub:'Catch the ferry back — golden hour on the bay',who:'both',type:'tourism'},
-    {t:'19:30',title:'Light dinner out',sub:'Casual — sandwich/bite counts (weekend exception)',who:'both',type:'food'},
+    {t:'06:00',title:'Leave for Yosemite 🏔',sub:'Extranomical tour departs Union Square — early start!',who:'both',type:'tourism'},
+    {t:'09:00',title:'Arrive Yosemite Valley',sub:'~3h drive · El Capitan, Half Dome, Bridalveil Fall',who:'both',type:'tourism'},
+    {t:'13:00',title:'Lunch in the valley',sub:'Picnic or Yosemite Valley Lodge café',who:'both',type:'food'},
+    {t:'15:00',title:'Valley hike & explore',sub:'Mirror Lake loop or Lower Yosemite Falls trail',who:'both',type:'tourism'},
+    {t:'18:00',title:'Head back to SF',sub:'~3h drive back',who:'both',type:'tourism'},
+    {t:'21:00',title:'Dinner out',sub:'Something easy near home — you\'ll be tired!',who:'both',type:'food'},
   ]},
   {date:17,wd:'Sunday',tags:['free'],blocks:[
     {t:'09:00',title:'Jaime breakfast',sub:'Self-service',who:'jaime',type:'food',jm:J},
@@ -276,9 +283,10 @@ const SF=[
     {t:'10:00',title:'Sara — Run',sub:'40 min easy run 🏃‍♀️',who:'sara',type:'workout'},
     {t:'13:00',title:'Jaime — Gym',sub:'60 min strength session 🏋️',who:'jaime',type:'workout'},
     {t:'11:00',title:'Tanning session',sub:'Min. 30 min',who:'sara',type:'leisure'},
-    {t:'13:00',title:'Fisherman\'s Wharf & Pier 39 🦀',sub:'Clam chowder in a bread bowl — mandatory',who:'both',type:'tourism'},
-    {t:'15:30',title:'Mission District — Tartine Bakery 🥐',sub:'Best pastries in SF + murals in the Mission',who:'both',type:'tourism'},
-    {t:'19:00',title:'Dinner at home',sub:'Sara cooks',who:'both',type:'food',sm:S,jm:J},
+    {t:'12:00',title:'Lunch out',sub:'Weekend outside meal',who:'both',type:'food'},
+    {t:'14:00',title:'Golden Gate Bridge 🌁',sub:'Walk the bridge + views from Battery Spencer',who:'both',type:'tourism'},
+    {t:'16:30',title:'Sausalito by ferry ⛴',sub:'Catch the ferry back — golden hour on the bay',who:'both',type:'tourism'},
+    {t:'19:30',title:'Dinner at home',sub:'Sara cooks · recovery Sunday',who:'both',type:'food',sm:S,jm:J},
   ]},
   {date:18,wd:'Monday',tags:['wjaime','free'],blocks:[
     {t:'04:00',title:'Jaime work begins',sub:'8h · 04:00–12:00 SF = 13:00–21:00 Spain',who:'jaime',type:'work'},
@@ -297,7 +305,7 @@ const SF=[
     {t:'04:00',title:'Jaime work begins',sub:'8h · 04:00–12:00 SF = 13:00–21:00 Spain',who:'jaime',type:'work'},
     {t:'05:00',title:'Jaime breakfast',sub:'Self-service',who:'jaime',type:'food',jm:J},
     {t:'09:30',title:'Sara breakfast',sub:'',who:'sara',type:'food',sm:S},
-    {t:'10:00',title:'Sara — Yin Yoga or Bike with Jaime 🧘‍♀️🚴',sub:'Tap to open yoga video',who:'sara',type:'workout',url:'https://youtu.be/4pKly2JojMw'},
+    {t:'10:00',title:'Sara — Yin Yoga or Bike with Jaime 🧘‍♀️🚴',sub:'Tap to open yoga video',who:'sara',type:'workout',url:'https://www.youtube.com/watch?v=J8vj0H0L2Uw'},
     {t:'13:00',title:'Jaime — Bike',sub:'1.5–2h ride 🚴',who:'jaime',type:'workout'},
     {t:'10:00',title:'Tanning session',sub:'Min. 30 min',who:'sara',type:'leisure'},
     {t:'10:30',title:'Last chance: David & Moustafa',sub:"See whoever hasn't been seen yet!",who:'sara',type:'social'},
@@ -323,7 +331,7 @@ const SF=[
     {t:'04:00',title:'Jaime work begins',sub:'8h · 04:00–12:00 SF = 13:00–21:00 Spain',who:'jaime',type:'work'},
     {t:'05:00',title:'Jaime breakfast',sub:'Self-service · last SF workday',who:'jaime',type:'food',jm:J},
     {t:'09:30',title:'Sara breakfast',sub:'Last SF morning!',who:'sara',type:'food',sm:S},
-    {t:'10:00',title:'Sara — Yin Yoga or Bike with Jaime 🧘‍♀️🚴',sub:'Tap to open yoga video',who:'sara',type:'workout',url:'https://youtu.be/fSm6NYGdSAI'},
+    {t:'10:00',title:'Sara — Yin Yoga or Bike with Jaime 🧘‍♀️🚴',sub:'Tap to open yoga video',who:'sara',type:'workout',url:'https://www.youtube.com/watch?v=J8vj0H0L2Uw'},
     {t:'13:00',title:'Jaime — Bike',sub:'1.5–2h ride 🚴',who:'jaime',type:'workout'},
     {t:'10:30',title:'Tanning session',sub:'Last SF sun — soak it up!',who:'sara',type:'leisure'},
     {t:'11:00',title:'Final SF tourism',sub:"Whatever's left on the list",who:'sara',type:'leisure'},
@@ -335,18 +343,48 @@ const SF=[
 ];
 
 const RET=[
-  {date:22,wd:'Friday',tags:['flight'],note:'⚠️ BCN→MIA outbound flight times still to confirm.',blocks:[
-    {t:'09:00',title:'Leave for SFO',sub:'Airport transfer — allow 1h+ for SFO',who:'both',type:'flight'},
-    {t:'10:30',title:'SFO bag drop & security',sub:'Check in · AA 2565',who:'both',type:'flight'},
-    {t:'12:00',title:'Flight SFO → MIA departs',sub:'AA 2565 · Economy (B)',who:'both',type:'flight'},
-    {t:'In-flight',title:'Lunch on the plane',sub:'Track as best you can',who:'both',type:'food'},
-    {t:'20:47',title:'Arrive MIA',sub:'Connecting to Barcelona — confirm bag recheck',who:'both',type:'flight'},
-    {t:'~22:00',title:'Flight MIA → BCN departs',sub:'Overnight flight home 🏠 · ⚠️ confirm!',who:'both',type:'flight'},
-    {t:'In-flight',title:'Dinner on the plane',sub:'Last trip meal — you made it!',who:'both',type:'food'},
+  {date:22,wd:'Friday',tags:['flight'],blocks:[
+    {t:'09:00',title:'Leave for SFO',sub:'Allow time for check-in & security · AA 2565',who:'both',type:'flight'},
+    {t:'12:00',title:'Flight SFO → MIA departs',sub:'AA 2565 · arrives 8:47 PM Miami time',who:'both',type:'flight'},
+    {t:'~22:00',title:'Flight MIA → BCN departs',sub:'Overnight home 🏠 · arrives BCN next morning ⚠️ confirm!',who:'both',type:'flight'},
   ]},
 ];
 
-// activeType: null = show all, else = show only this type
+const BUCKET = [
+  { id:'luma',      text:"Luma Events 🎉",                    sub:'Check lu.ma for SF events during the trip' },
+  { id:'tram',      text:'Cable Car 🚃',                      sub:'Ride the iconic Powell-Hyde line' },
+  { id:'gg',        text:'Golden Gate Bridge 🌁',              sub:'Walk across + views from Battery Spencer' },
+  { id:'yosemite',  text:'Yosemite 🏔',                        sub:'Full day trip — book Extranomical bus!' },
+  { id:'alcatraz',  text:'Alcatraz 🏝',                        sub:'Book at alcatrazcruises.com in advance' },
+  { id:'fishermans',text:"Fisherman's Wharf + Exploratorium 🦀🔬", sub:'Clam chowder bread bowl + Pier 15 interactive science museum — same street' },
+  { id:'disney',    text:'Walt Disney Family Museum 🏰',        sub:'In the Presidio — 10 min walk from Golden Gate' },
+  { id:'calacademy',text:'California Academy of Sciences 🌿',  sub:'Golden Gate Park — rainforest dome + planetarium + aquarium in one' },
+  { id:'sfmoma',    text:'SFMOMA 🎨',                          sub:'Downtown — best on a rainy weekday afternoon' },
+];
+
+function renderBucket(){
+  const el = document.getElementById('s-bucket');
+  const done = JSON.parse(localStorage.getItem('bucket-done') || '{}');
+  const items = BUCKET.map(b => `
+    <div class="bucket-item ${done[b.id]?'done':''}" onclick="toggleBucket('${b.id}')">
+      <div class="bucket-check"></div>
+      <div>
+        <div class="bucket-text">${b.text}</div>
+        ${b.sub?`<div class="bucket-sub">${b.sub}</div>`:''}
+      </div>
+    </div>`).join('');
+  el.innerHTML = `<div class="bucket-card">
+    <div class="bucket-header"><div class="bucket-title">⭐ SF Bucket List</div></div>
+    ${items}
+  </div>`;
+}
+
+function toggleBucket(id){
+  const done = JSON.parse(localStorage.getItem('bucket-done') || '{}');
+  done[id] = !done[id];
+  localStorage.setItem('bucket-done', JSON.stringify(done));
+  renderBucket();
+}
 // activePerson: null = show all, else = show only this person
 let activeType = null;
 let activePerson = null;
@@ -358,6 +396,8 @@ function switchCity(c,el){
   el.classList.add('active');
   document.querySelectorAll('.main').forEach(s=>s.classList.add('section-hidden'));
   document.getElementById('s-'+c).classList.remove('section-hidden');
+  // hide filters on bucket tab
+  document.querySelector('.filters').style.display = c==='bucket' ? 'none' : 'flex';
   render();
   window.scrollTo({top:0,behavior:'smooth'});
 }
@@ -462,6 +502,7 @@ function render(){
   document.querySelector('.filters').style.top = hdr.offsetHeight + 'px';
   if(city==='miami') renderSection(MIAMI,'s-miami');
   if(city==='sf')    renderSection([...SF,...RET],'s-sf');
+  if(city==='bucket') renderBucket();
 }
 render();
 </script>
