@@ -5,9 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="apple-mobile-web-app-title" content="USA Trip">
+<meta name="apple-mobile-web-app-title" content="USA Trip 26">
 <meta name="theme-color" content="#ffffff">
-<title>USA Trip · May 2026</title>
+<title>🇺🇸 USA Trip 26 🇺🇸</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -21,9 +21,9 @@
     --sara: #b8306a;
     --sara-bg: #fdf0f6;
     --sara-border: #f0b8d4;
-    --jaime: #1a5fb0;
-    --jaime-bg: #e8f0fc;
-    --jaime-border: #b8d0f0;
+    --jaime: #0891b2;
+    --jaime-bg: #ecfeff;
+    --jaime-border: #a5f3fc;
     --both: #6b5ea8;
     --both-bg: #f0eefa;
     --amber: #b85c00;
@@ -56,7 +56,7 @@
   .city-tab { flex-shrink: 0; font-size: 12px; font-weight: 500; padding: 8px 14px; border-radius: 8px 8px 0 0; cursor: pointer; color: var(--muted); border: 1px solid transparent; border-bottom: none; transition: all 0.15s; white-space: nowrap; background: transparent; }
   .city-tab.active { background: var(--white); color: var(--text); border-color: var(--border); }
 
-  .filters { background: var(--white); border-bottom: 1px solid var(--border); padding: 10px 16px; display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; align-items: center; }
+  .filters { position: sticky; top: var(--header-h, 89px); z-index: 90; background: var(--white); border-bottom: 1px solid var(--border); padding: 10px 16px; display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; align-items: center; }
   .filters::-webkit-scrollbar { display: none; }
   .fsep { width: 1px; height: 20px; background: var(--border); flex-shrink: 0; }
   .flabel { font-size: 10px; color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; flex-shrink: 0; }
@@ -117,15 +117,12 @@
 <div class="header">
   <div class="header-top">
     <div>
-      <div class="trip-title">Sara & Jaime · USA 🇺🇸</div>
-      <div class="trip-sub">May 8 – 22, 2026</div>
+      <div class="trip-title">🇺🇸 USA Trip 26 🇺🇸</div>
     </div>
-    <div class="badge">May 2026</div>
   </div>
   <div class="city-tabs">
     <div class="city-tab active" onclick="switchCity('miami',this)">🌴 Miami</div>
     <div class="city-tab" onclick="switchCity('sf',this)">🌉 San Francisco</div>
-    <div class="city-tab" onclick="switchCity('ret',this)">✈️ Return</div>
   </div>
 </div>
 
@@ -143,7 +140,6 @@
 
 <div id="s-miami" class="main"></div>
 <div id="s-sf"    class="main section-hidden"></div>
-<div id="s-ret"   class="main section-hidden"></div>
 
 <div class="legend">
   <div class="li"><div class="ld" style="background:var(--sara)"></div>Sara</div>
@@ -378,7 +374,9 @@ function renderSection(days,id){
       <span class="chip ${actClass(b.type)}" style="align-self:center;flex-shrink:0;margin-left:6px">${actLabel(b.type)}</span>
     </div>`).join('');
     const cid=`day-${d.date}`;
-    h+=`<div class="day-card" id="${cid}">
+    const todayDate = new Date();
+    const isToday = todayDate.getFullYear()===2026 && todayDate.getMonth()===4 && todayDate.getDate()===d.date;
+    h+=`<div class="day-card${isToday?'':' collapsed'}" id="${cid}">
       <div class="day-header" onclick="toggleDay('${cid}')">
         <span class="day-num">${d.date}</span>
         <div><div class="day-wd">${d.wd}</div><div class="day-mo">May 2026</div></div>
@@ -394,9 +392,11 @@ function toggleDay(id){
   document.getElementById(id).classList.toggle('collapsed');
 }
 function render(){
-  if(city==='miami')renderSection(MIAMI,'s-miami');
-  if(city==='sf')renderSection(SF,'s-sf');
-  if(city==='ret')renderSection(RET,'s-ret');
+  // keep filters stuck just below header
+  const hdr = document.querySelector('.header');
+  document.querySelector('.filters').style.top = hdr.offsetHeight + 'px';
+  if(city==='miami') renderSection(MIAMI,'s-miami');
+  if(city==='sf')    renderSection([...SF,...RET],'s-sf');
 }
 render();
 </script>
