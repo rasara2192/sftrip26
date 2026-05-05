@@ -21,9 +21,12 @@
     --sara: #b8306a;
     --sara-bg: #fdf0f6;
     --sara-border: #f0b8d4;
-    --jaime: #0891b2;
-    --jaime-bg: #ecfeff;
-    --jaime-border: #a5f3fc;
+    --jaime: #1a5fb0;
+    --jaime-bg: #e8f0fc;
+    --jaime-border: #b8d0f0;
+    --both: #6b6b6b;
+    --both-bg: #f4f4f4;
+    --both-border: #d4d4d4;
     --both: #6b5ea8;
     --both-bg: #f0eefa;
     --amber: #b85c00;
@@ -37,7 +40,7 @@
     --blue-bg: #eef4ff;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-  body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; padding-bottom: 80px; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; padding-bottom: 20px; }
 
   .header {
     position: sticky; top: 0; z-index: 100;
@@ -88,7 +91,7 @@
   .block { display: flex; gap: 10px; align-items: flex-start; padding: 9px 10px; border-radius: 10px; border: 1px solid var(--border); background: var(--white); border-left-width: 3px; }
   .block.who-sara  { border-left-color: var(--sara);  background: var(--sara-bg);  border-color: var(--sara-border); }
   .block.who-jaime { border-left-color: var(--jaime); background: var(--jaime-bg); border-color: var(--jaime-border); }
-  .block.who-both  { border-left-color: var(--both);  background: var(--both-bg);  border-color: #d0c8f0; }
+  .block.who-both  { border-left-color: var(--both);  background: var(--both-bg);  border-color: var(--both-border); }
 
   .btime { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--muted); min-width: 50px; padding-top: 2px; flex-shrink: 0; white-space: nowrap; }
   .bbody { flex: 1; min-width: 0; }
@@ -98,7 +101,7 @@
   .bwho { font-size: 10px; padding: 1px 7px; border-radius: 999px; margin-left: 6px; flex-shrink: 0; align-self: center; white-space: nowrap; font-weight: 500; }
   .bw-sara  { background: var(--sara-bg); color: var(--sara); border: 1px solid var(--sara-border); }
   .bw-jaime { background: var(--jaime-bg); color: var(--jaime); border: 1px solid var(--jaime-border); }
-  .bw-both  { background: var(--both-bg); color: var(--both); border: 1px solid #d0c8f0; }
+  .bw-both  { background: var(--both-bg); color: var(--both); border: 1px solid var(--both-border); }
 
   .macro-row { display: flex; gap: 4px; flex-wrap: wrap; margin-top: 5px; }
   .mc { font-family: 'DM Mono', monospace; font-size: 9px; padding: 2px 6px; border-radius: 4px; background: var(--subtle); color: var(--muted); border: 1px solid var(--border); }
@@ -107,7 +110,7 @@
   .day-note { font-size: 10px; color: var(--amber); padding: 7px 14px 10px; border-top: 1px solid var(--amber-border); background: var(--amber-bg); font-style: italic; }
   .empty { text-align: center; padding: 3rem 1rem; color: var(--muted); font-size: 13px; font-style: italic; }
 
-  .legend { display: flex; gap: 12px; padding: 12px 16px; border-top: 1px solid var(--border); background: var(--white); flex-wrap: wrap; position: fixed; bottom: 0; left: 0; right: 0; z-index: 50; box-shadow: 0 -4px 16px rgba(0,0,0,0.06); }
+  .legend { display: none; /* hidden for now, keep for later */ 
   .li { display: flex; align-items: center; gap: 5px; font-size: 10px; color: var(--muted); }
   .ld { width: 7px; height: 7px; border-radius: 50%; }
 </style>
@@ -128,14 +131,14 @@
 
 <div class="filters">
   <span class="flabel">Who</span>
-  <span class="pill on-sara"  onclick="toggleP('sara',this)">Sara</span>
-  <span class="pill on-jaime" onclick="toggleP('jaime',this)">Jaime</span>
+  <span class="pill" data-who="sara"  onclick="toggleP('sara',this)">👩🏻‍🦱 Sara</span>
+  <span class="pill" data-who="jaime" onclick="toggleP('jaime',this)">👨🏻‍🦱 Jaime</span>
   <div class="fsep"></div>
   <span class="flabel">Type</span>
-  <span class="pill on-type" onclick="toggleT('flight',this)">✈ Flights</span>
-  <span class="pill on-type" onclick="toggleT('work',this)">💼 Work</span>
-  <span class="pill on-type" onclick="toggleT('food',this)">🍽 Meals</span>
-  <span class="pill on-type" onclick="toggleT('social',this)">👥 Social</span>
+  <span class="pill" data-type="flight"  onclick="toggleT('flight',this)">✈ Flights</span>
+  <span class="pill" data-type="work"    onclick="toggleT('work',this)">💼 Work</span>
+  <span class="pill" data-type="food"    onclick="toggleT('food',this)">🍽 Meals</span>
+  <span class="pill" data-type="social"  onclick="toggleT('social',this)">👥 Social</span>
 </div>
 
 <div id="s-miami" class="main"></div>
@@ -313,7 +316,11 @@ const RET=[
   ]},
 ];
 
-let aP={sara:true,jaime:true},aT={flight:true,work:true,food:true,social:true,leisure:true,meeting:true},city='miami';
+// activeType: null = show all, else = show only this type
+// activePerson: null = show all, else = show only this person
+let activeType = null;
+let activePerson = null;
+let city = 'miami';
 
 function switchCity(c,el){
   city=c;
@@ -324,28 +331,43 @@ function switchCity(c,el){
   render();
   window.scrollTo({top:0,behavior:'smooth'});
 }
-function toggleP(p,el){aP[p]=!aP[p];el.className='pill '+(aP[p]?'on-'+p:'');render();}
-function toggleT(t,el){aT[t]=!aT[t];el.className='pill '+(aT[t]?'on-type':'');render();}
+
+function toggleP(p, el){
+  activePerson = activePerson === p ? null : p;
+  document.querySelectorAll('.pill[data-who]').forEach(pill => {
+    const who = pill.dataset.who;
+    pill.className = 'pill ' + (activePerson === who ? 'on-'+who : '');
+  });
+  render();
+}
+
+function toggleT(t, el){
+  activeType = activeType === t ? null : t;
+  document.querySelectorAll('.pill[data-type]').forEach(pill => {
+    const type = pill.dataset.type;
+    pill.className = 'pill ' + (activeType === type ? 'on-type' : '');
+  });
+  render();
+}
+
 function bVis(b){
-  // map leisure/meeting to no filter key — hide them when any filter is active that wouldn't include them
-  const filterMap = {flight:'flight',work:'work',food:'food',social:'social',leisure:null,meeting:'work'};
-  const key = filterMap[b.type];
-  // if any filter is OFF, we're in filtered mode
-  const anyOff = !aT.flight||!aT.work||!aT.food||!aT.social;
-  if(anyOff){
-    // leisure has no filter key — hide it when we're filtering
-    if(b.type==='leisure') return false;
-    // meeting maps to work
-    if(b.type==='meeting' && !aT.work) return false;
-    if(key && !aT[key]) return false;
+  // person filter
+  if(activePerson){
+    if(b.who !== activePerson && b.who !== 'both') return false;
   }
-  if(b.who==='both') return aP.sara||aP.jaime;
-  return!!aP[b.who];
+  // type filter
+  if(activeType){
+    const typeMap = {meeting:'work'}; // meeting counts as work
+    const btype = typeMap[b.type] || b.type;
+    if(btype !== activeType) return false;
+  }
+  return true;
 }
 function whoLabel(w){return w==='both'?'Both':w==='sara'?'Sara':'Jaime';}
 function whoClass(w){return w==='both'?'bw-both':'bw-'+w;}
 function macroHtml(b){
-  const ss=aP.sara&&b.sm&&(b.who==='sara'||b.who==='both'),sj=aP.jaime&&b.jm&&(b.who==='jaime'||b.who==='both');
+  const ss=(activePerson===null||activePerson==='sara')&&b.sm&&(b.who==='sara'||b.who==='both');
+  const sj=(activePerson===null||activePerson==='jaime')&&b.jm&&(b.who==='jaime'||b.who==='both');
   if(!ss&&!sj)return '';
   const chips=arr=>arr.map(c=>`<span class="mc">${c}</span>`).join('');
   if(ss&&sj)return`<div class="mwho">Sara</div><div class="macro-row">${chips(b.sm)}</div><div class="mwho" style="margin-top:3px">Jaime</div><div class="macro-row">${chips(b.jm)}</div>`;
@@ -376,7 +398,9 @@ function renderSection(days,id){
     const cid=`day-${d.date}`;
     const todayDate = new Date();
     const isToday = todayDate.getFullYear()===2026 && todayDate.getMonth()===4 && todayDate.getDate()===d.date;
-    h+=`<div class="day-card${isToday?'':' collapsed'}" id="${cid}">
+    const isFiltering = activeType !== null || activePerson !== null;
+    const expanded = isFiltering || isToday;
+    h+=`<div class="day-card${expanded?'':' collapsed'}" id="${cid}">
       <div class="day-header" onclick="toggleDay('${cid}')">
         <span class="day-num">${d.date}</span>
         <div><div class="day-wd">${d.wd}</div><div class="day-mo">May 2026</div></div>
