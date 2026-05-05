@@ -1,0 +1,366 @@
+
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: var(--font-sans); }
+  .cal-wrap { padding: 1rem 0; }
+  .filters { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 1.5rem; }
+  .filter-group { display: flex; gap: 6px; align-items: center; }
+  .filter-label { font-size: 11px; color: var(--color-text-tertiary); text-transform: uppercase; letter-spacing: 0.05em; margin-right: 2px; }
+  .pill { font-size: 12px; padding: 4px 10px; border-radius: 999px; border: 0.5px solid var(--color-border-secondary); background: var(--color-background-primary); color: var(--color-text-secondary); cursor: pointer; transition: all 0.15s; user-select: none; }
+  .pill.active-sara { background: #E1F5EE; color: #0F6E56; border-color: #5DCAA5; }
+  .pill.active-jaime { background: #E6F1FB; color: #185FA5; border-color: #378ADD; }
+  .pill.active-filter { background: var(--color-background-secondary); color: var(--color-text-primary); border-color: var(--color-border-primary); }
+  .divider { width: 0.5px; background: var(--color-border-tertiary); height: 24px; }
+  .city-header { font-size: 11px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-text-tertiary); padding: 4px 0 8px; margin-top: 1rem; border-bottom: 0.5px solid var(--color-border-tertiary); margin-bottom: 12px; }
+  .days-grid { display: flex; flex-direction: column; gap: 10px; }
+  .day-card { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); overflow: hidden; }
+  .day-header { display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-bottom: 0.5px solid var(--color-border-tertiary); background: var(--color-background-secondary); }
+  .day-num { font-size: 20px; font-weight: 500; color: var(--color-text-primary); min-width: 28px; }
+  .day-name { font-size: 12px; color: var(--color-text-secondary); }
+  .day-tags { display: flex; gap: 5px; margin-left: auto; }
+  .tag { font-size: 10px; padding: 2px 8px; border-radius: 999px; }
+  .tag-travel { background: #FAEEDA; color: #854F0B; }
+  .tag-work-sara { background: #E1F5EE; color: #0F6E56; }
+  .tag-work-jaime { background: #E6F1FB; color: #185FA5; }
+  .tag-family { background: #FBEAF0; color: #993556; }
+  .tag-social { background: #EEEDFE; color: #3C3489; }
+  .tag-leisure { background: #EAF3DE; color: #3B6D11; }
+  .tag-free { background: var(--color-background-secondary); color: var(--color-text-tertiary); }
+  .blocks { padding: 10px 14px; display: flex; flex-direction: column; gap: 6px; }
+  .block { display: flex; gap: 10px; align-items: flex-start; padding: 7px 10px; border-radius: var(--border-radius-md); border: 0.5px solid var(--color-border-tertiary); }
+  .block-time { font-size: 11px; color: var(--color-text-tertiary); min-width: 52px; padding-top: 1px; white-space: nowrap; }
+  .block-content { flex: 1; }
+  .block-title { font-size: 13px; font-weight: 500; color: var(--color-text-primary); }
+  .block-sub { font-size: 11px; color: var(--color-text-secondary); margin-top: 1px; }
+  .block-person { font-size: 10px; padding: 1px 6px; border-radius: 999px; margin-left: auto; white-space: nowrap; align-self: center; }
+  .b-sara { background: #E1F5EE; color: #0F6E56; }
+  .b-jaime { background: #E6F1FB; color: #185FA5; }
+  .b-both { background: #F1EFE8; color: #5F5E5A; }
+  .b-travel { background: #FAEEDA; color: #854F0B; }
+  .b-work { background: #FCEBEB; color: #A32D2D; }
+  .b-food { background: #FBEAF0; color: #993556; }
+  .b-social { background: #EEEDFE; color: #3C3489; }
+  .b-leisure { background: #EAF3DE; color: #3B6D11; }
+  .macro-badge { display: inline-flex; gap: 6px; font-size: 10px; color: var(--color-text-tertiary); margin-top: 3px; }
+  .macro-badge span { background: var(--color-background-secondary); padding: 1px 5px; border-radius: 4px; }
+  .hidden { display: none !important; }
+  .note { font-size: 11px; color: var(--color-text-tertiary); font-style: italic; padding: 4px 14px 10px; }
+  .legend { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 1rem; }
+  .flight-banner { background: #FAEEDA; border: 0.5px solid #EF9F27; border-radius: var(--border-radius-md); padding: 8px 12px; font-size: 12px; color: #633806; display: flex; align-items: center; gap: 8px; margin: 6px 0; }
+</style>
+
+<div class="cal-wrap">
+  <div class="filters">
+    <div class="filter-group">
+      <span class="filter-label">Person</span>
+      <span class="pill active-sara" onclick="togglePerson('sara', this)">Sara</span>
+      <span class="pill active-jaime" onclick="togglePerson('jaime', this)">Jaime</span>
+    </div>
+    <div class="divider"></div>
+    <div class="filter-group">
+      <span class="filter-label">Activity</span>
+      <span class="pill active-filter" data-type="travel" onclick="toggleType('travel', this)">Travel</span>
+      <span class="pill active-filter" data-type="work" onclick="toggleType('work', this)">Work</span>
+      <span class="pill active-filter" data-type="food" onclick="toggleType('food', this)">Meals</span>
+      <span class="pill active-filter" data-type="social" onclick="toggleType('social', this)">Social</span>
+      <span class="pill active-filter" data-type="leisure" onclick="toggleType('leisure', this)">Leisure & tan</span>
+      <span class="pill active-filter" data-type="family" onclick="toggleType('family', this)">Family</span>
+    </div>
+  </div>
+
+  <div class="city-header">Miami — May 8–12</div>
+  <div class="days-grid" id="days-grid"></div>
+
+  <div class="city-header" style="margin-top:2rem;">San Francisco — May 13–21</div>
+  <div class="days-grid" id="sf-grid"></div>
+
+  <div class="city-header" style="margin-top:2rem;">Return — May 22</div>
+  <div class="days-grid" id="return-grid"></div>
+</div>
+
+<script>
+const SARA_MACROS = { p: '130g', c: '106–150g', f: '41–60g', kcal: '1300–1640' };
+const JAIME_MACROS = { p: '160g', c: '200–250g', f: '60–80g', kcal: '2000–2400' };
+
+function macroStr(m) {
+  return `P ${m.p} · C ${m.c} · F ${m.f} · ${m.kcal} kcal`;
+}
+
+const DAYS_MIAMI = [
+  {
+    date: 8, name: 'Thursday', tags: ['travel'],
+    blocks: [
+      { time: '15:00', title: 'Leave for airport', sub: 'Head to BCN Terminal 1', person: 'both', type: 'travel' },
+      { time: '17:00', title: 'Bag drop & security', sub: 'Check in bags, through security', person: 'both', type: 'travel' },
+      { time: '19:00', title: 'Dinner at airport', sub: 'Light meal before flight', person: 'both', type: 'food', note: 'Sara: ~400 kcal · Jaime: ~600 kcal' },
+      { time: '20:30', title: 'Flight BCN → MIA', sub: 'Approx. 10h flight · arrives ~01:30 MIA time', person: 'both', type: 'travel' },
+    ],
+    note: '⚠️ Update flight times when confirmed!'
+  },
+  {
+    date: 9, name: 'Friday', tags: ['work-sara'],
+    blocks: [
+      { time: '~01:30', title: 'Arrive Miami', sub: 'Immigration, bags, get to accommodation', person: 'both', type: 'travel' },
+      { time: '~04:00', title: 'Sleep', sub: 'Rest after arrival', person: 'both', type: 'leisure' },
+      { time: '09:00', title: 'Jaime breakfast', sub: macroStr(JAIME_MACROS) + ' (self-service)', person: 'jaime', type: 'food' },
+      { time: '09:00', title: 'Sara work block begins', sub: '8h incl. lunch · remote', person: 'sara', type: 'work' },
+      { time: '13:00', title: 'Lunch together', sub: 'Sara cooks at home', person: 'both', type: 'food', note: 'Sara macros: ' + macroStr(SARA_MACROS) },
+      { time: '14:00', title: 'Jaime: free afternoon', sub: 'Explore, settle in', person: 'jaime', type: 'leisure' },
+      { time: '18:00', title: 'Sara work ends', sub: '8h complete', person: 'sara', type: 'work' },
+      { time: '19:00', title: 'Dinner out?', sub: 'First night in Miami — 1 meal outside budget', person: 'both', type: 'food' },
+    ]
+  },
+  {
+    date: 10, name: 'Saturday', tags: ['family', 'free'],
+    blocks: [
+      { time: '08:00', title: 'Jaime breakfast', sub: macroStr(JAIME_MACROS) + ' (self-service)', person: 'jaime', type: 'food' },
+      { time: '09:00', title: 'Sara breakfast', sub: macroStr(SARA_MACROS), person: 'sara', type: 'food' },
+      { time: '10:00', title: 'Tanning session', sub: 'Min. 30 min · outdoor / pool', person: 'sara', type: 'leisure' },
+      { time: '13:00', title: 'Lunch at home', sub: 'Sara cooks · together', person: 'both', type: 'food' },
+      { time: '15:00', title: 'Family visit', sub: 'Time with Sara\'s family in Miami', person: 'sara', type: 'family' },
+      { time: '19:00', title: 'Dinner (outside or family)', sub: 'If family visit → dinner there counts as 1 outside meal', person: 'both', type: 'food' },
+    ]
+  },
+  {
+    date: 11, name: 'Sunday', tags: ['work-sara', 'work-jaime'],
+    blocks: [
+      { time: '06:00', title: 'Jaime work block begins', sub: '8h · from home in Miami (12:00 Spain)', person: 'jaime', type: 'work' },
+      { time: '08:00', title: 'Jaime breakfast', sub: macroStr(JAIME_MACROS) + ' (self-service)', person: 'jaime', type: 'food' },
+      { time: '09:00', title: 'Sara work block begins', sub: '8h incl. lunch · remote', person: 'sara', type: 'work' },
+      { time: '09:00', title: 'Sara breakfast', sub: macroStr(SARA_MACROS), person: 'sara', type: 'food' },
+      { time: '13:00', title: 'Lunch together', sub: 'Sara cooks at home', person: 'both', type: 'food' },
+      { time: '14:00', title: 'Jaime work ends', sub: '8h complete', person: 'jaime', type: 'work' },
+      { time: '14:00', title: 'Jaime: tanning / chill', sub: 'Afternoon free', person: 'jaime', type: 'leisure' },
+      { time: '17:00', title: 'Sara work ends', sub: '8h complete', person: 'sara', type: 'work' },
+      { time: '17:30', title: 'Tanning session', sub: 'Min. 30 min', person: 'sara', type: 'leisure' },
+      { time: '20:00', title: 'Dinner at home', sub: 'Sara cooks', person: 'both', type: 'food' },
+    ]
+  },
+  {
+    date: 12, name: 'Monday', tags: ['family', 'free', 'work-jaime'],
+    blocks: [
+      { time: '06:00', title: 'Jaime work block begins', sub: '8h · from home in Miami (12:00 Spain)', person: 'jaime', type: 'work' },
+      { time: '08:00', title: 'Jaime breakfast', sub: macroStr(JAIME_MACROS) + ' (self-service)', person: 'jaime', type: 'food' },
+      { time: '09:00', title: 'Sara: free morning', sub: 'Explore, errands, pack for SF', person: 'sara', type: 'leisure' },
+      { time: '09:30', title: 'Sara breakfast', sub: macroStr(SARA_MACROS), person: 'sara', type: 'food' },
+      { time: '10:30', title: 'Tanning session', sub: 'Min. 30 min', person: 'sara', type: 'leisure' },
+      { time: '13:00', title: 'Lunch at home', sub: 'Sara cooks for both', person: 'both', type: 'food' },
+      { time: '14:00', title: 'Jaime work ends', sub: '8h complete', person: 'jaime', type: 'work' },
+      { time: '15:00', title: 'Family visit #2', sub: 'Second family visit — at least 2 in Miami ticked!', person: 'sara', type: 'family' },
+      { time: '19:00', title: 'Dinner (outside?)', sub: '1 outside meal — could be family dinner', person: 'both', type: 'food' },
+    ]
+  },
+];
+
+const DAYS_SF = [
+  {
+    date: 13, name: 'Tuesday', tags: ['travel', 'work-jaime'],
+    blocks: [
+      { time: '~08:00', title: 'Leave for MIA airport', sub: 'Head out early', person: 'both', type: 'travel' },
+      { time: '09:00', title: 'Jaime breakfast', sub: 'Quick at airport / home before leaving', person: 'jaime', type: 'food' },
+      { time: '~10:00', title: 'Flight MIA → SFO', sub: 'Approx. 5.5h flight ⚠️ confirm time!', person: 'both', type: 'travel' },
+      { time: '17:00 Spain', title: 'Sara possible meeting', sub: '17:00h Spain = 08:00 Pacific — adjust if confirmed', person: 'sara', type: 'work', note: 'TBC — 08:00 SF time if morning flight, check your calendar!' },
+      { time: '~16:00', title: 'Arrive SF, settle in', sub: 'Get to accommodation', person: 'both', type: 'travel' },
+      { time: '19:00', title: 'First night in SF', sub: 'Dinner out — 1 outside meal', person: 'both', type: 'food' },
+    ],
+    note: '⚠️ Update MIA→SFO flight details when confirmed!'
+  },
+  {
+    date: 14, name: 'Wednesday', tags: ['work-jaime', 'free'],
+    blocks: [
+      { time: '04:00', title: 'Jaime work block begins', sub: '8h · from SF (12:00 Spain)', person: 'jaime', type: 'work' },
+      { time: '06:00', title: 'Jaime breakfast', sub: macroStr(JAIME_MACROS) + ' (self-service)', person: 'jaime', type: 'food' },
+      { time: '09:00', title: 'Sara: free day', sub: 'Explore SF, rest, or plan social', person: 'sara', type: 'leisure' },
+      { time: '09:00', title: 'Sara breakfast', sub: macroStr(SARA_MACROS), person: 'sara', type: 'food' },
+      { time: '10:00', title: 'Tanning session', sub: 'Min. 30 min · SF weather permitting!', person: 'sara', type: 'leisure' },
+      { time: '12:00', title: 'Jaime work ends', sub: '8h complete', person: 'jaime', type: 'work' },
+      { time: '13:00', title: 'Lunch together', sub: 'Sara cooks or quick outside (Sat/Sun rule doesn\'t apply)', person: 'both', type: 'food' },
+      { time: '15:00', title: 'Afternoon together in SF', sub: 'Explore the city!', person: 'both', type: 'leisure' },
+      { time: '19:00', title: 'Dinner at home', sub: 'Sara cooks', person: 'both', type: 'food' },
+    ]
+  },
+  {
+    date: 15, name: 'Thursday', tags: ['work-jaime', 'social'],
+    blocks: [
+      { time: '04:00', title: 'Jaime work block begins', sub: '8h · from SF (12:00 Spain)', person: 'jaime', type: 'work' },
+      { time: '06:00', title: 'Jaime breakfast', sub: macroStr(JAIME_MACROS) + ' (self-service)', person: 'jaime', type: 'food' },
+      { time: '09:00', title: 'Sara: free morning', sub: 'See David or Moustafa?', person: 'sara', type: 'social' },
+      { time: '10:00', title: 'Tanning session', sub: 'Min. 30 min', person: 'sara', type: 'leisure' },
+      { time: '12:00', title: 'Jaime work ends', sub: '8h complete', person: 'jaime', type: 'work' },
+      { time: '13:00', title: 'Lunch at home', sub: 'Sara cooks', person: 'both', type: 'food' },
+      { time: '15:00', title: 'Free afternoon', sub: 'Tourism or rest', person: 'both', type: 'leisure' },
+      { time: '20:00', title: 'Dinner', sub: 'At home or out (1 outside meal)', person: 'both', type: 'food' },
+    ]
+  },
+  {
+    date: 16, name: 'Friday', tags: ['work-jaime', 'social'],
+    blocks: [
+      { time: '04:00', title: 'Jaime work block begins', sub: '8h · from SF (12:00 Spain)', person: 'jaime', type: 'work' },
+      { time: '06:00', title: 'Jaime breakfast', sub: macroStr(JAIME_MACROS) + ' (self-service)', person: 'jaime', type: 'food' },
+      { time: '09:00', title: 'Sara: free', sub: 'Social, tourism, tan', person: 'sara', type: 'leisure' },
+      { time: '10:00', title: 'Tanning session', sub: 'Min. 30 min', person: 'sara', type: 'leisure' },
+      { time: '12:00', title: 'Jaime work ends', sub: '8h complete', person: 'jaime', type: 'work' },
+      { time: '13:00', title: 'Lunch at home', sub: 'Sara cooks', person: 'both', type: 'food' },
+      { time: '15:00', title: 'Free afternoon', sub: 'David / Moustafa plans?', person: 'both', type: 'social' },
+      { time: '19:00', title: 'Dinner', sub: 'TGIF — outside meal!', person: 'both', type: 'food' },
+    ]
+  },
+  {
+    date: 17, name: 'Saturday', tags: ['social', 'free'],
+    blocks: [
+      { time: '08:00', title: 'Jaime breakfast', sub: macroStr(JAIME_MACROS) + ' (self-service)', person: 'jaime', type: 'food' },
+      { time: '09:00', title: 'Sara breakfast', sub: macroStr(SARA_MACROS), person: 'sara', type: 'food' },
+      { time: '10:00', title: 'Tanning session', sub: 'Min. 30 min', person: 'sara', type: 'leisure' },
+      { time: '11:00', title: 'See David or Moustafa', sub: 'Catch up in SF', person: 'sara', type: 'social' },
+      { time: '13:00', title: 'Weekend lunch out', sub: 'With David/Moustafa or just you two', person: 'both', type: 'food' },
+      { time: '16:00', title: 'SF tourism', sub: 'Golden Gate? Fisherman\'s Wharf? Add later!', person: 'both', type: 'leisure' },
+      { time: '19:30', title: 'Light dinner out', sub: 'Sandwich-style / casual — weekend "2 outside meals" exception', person: 'both', type: 'food' },
+    ]
+  },
+  {
+    date: 18, name: 'Sunday', tags: ['free'],
+    blocks: [
+      { time: '08:00', title: 'Jaime breakfast', sub: macroStr(JAIME_MACROS) + ' (self-service)', person: 'jaime', type: 'food' },
+      { time: '09:00', title: 'Sara breakfast', sub: macroStr(SARA_MACROS), person: 'sara', type: 'food' },
+      { time: '10:30', title: 'Tanning session', sub: 'Min. 30 min', person: 'sara', type: 'leisure' },
+      { time: '12:00', title: 'Lunch out together', sub: 'Sunday lunch!', person: 'both', type: 'food' },
+      { time: '14:00', title: 'Afternoon in SF', sub: 'Tourism / chill / plan the week', person: 'both', type: 'leisure' },
+      { time: '20:00', title: 'Dinner at home', sub: 'Sara cooks', person: 'both', type: 'food' },
+    ]
+  },
+  {
+    date: 19, name: 'Monday', tags: ['work-jaime', 'free'],
+    blocks: [
+      { time: '04:00', title: 'Jaime work block begins', sub: '8h · from SF (12:00 Spain)', person: 'jaime', type: 'work' },
+      { time: '06:00', title: 'Jaime breakfast', sub: macroStr(JAIME_MACROS) + ' (self-service)', person: 'jaime', type: 'food' },
+      { time: '09:00', title: 'Sara: free', sub: 'Social, errands, tan', person: 'sara', type: 'leisure' },
+      { time: '10:00', title: 'Tanning session', sub: 'Min. 30 min', person: 'sara', type: 'leisure' },
+      { time: '12:00', title: 'Jaime work ends', sub: '8h complete', person: 'jaime', type: 'work' },
+      { time: '13:00', title: 'Lunch at home', sub: 'Sara cooks', person: 'both', type: 'food' },
+      { time: '15:00', title: 'Afternoon plans', sub: 'Last days in SF — fill with what\'s left!', person: 'both', type: 'leisure' },
+      { time: '20:00', title: 'Dinner at home', sub: 'Sara cooks', person: 'both', type: 'food' },
+    ]
+  },
+  {
+    date: 20, name: 'Tuesday', tags: ['work-jaime', 'social'],
+    blocks: [
+      { time: '04:00', title: 'Jaime work block begins', sub: '8h · from SF (12:00 Spain)', person: 'jaime', type: 'work' },
+      { time: '06:00', title: 'Jaime breakfast', sub: macroStr(JAIME_MACROS) + ' (self-service)', person: 'jaime', type: 'food' },
+      { time: '09:00', title: 'Sara: see Moustafa or David', sub: 'Last chance!', person: 'sara', type: 'social' },
+      { time: '10:00', title: 'Tanning session', sub: 'Min. 30 min', person: 'sara', type: 'leisure' },
+      { time: '12:00', title: 'Jaime work ends', sub: '8h complete', person: 'jaime', type: 'work' },
+      { time: '13:00', title: 'Lunch at home', sub: 'Sara cooks', person: 'both', type: 'food' },
+      { time: '15:00', title: 'Pack & prep for return', sub: 'Flying out May 22 — start organizing', person: 'both', type: 'leisure' },
+      { time: '19:00', title: 'Dinner out', sub: 'Last SF dinner — make it nice!', person: 'both', type: 'food' },
+    ]
+  },
+  {
+    date: 21, name: 'Wednesday', tags: ['free'],
+    blocks: [
+      { time: '08:00', title: 'Jaime breakfast', sub: macroStr(JAIME_MACROS) + ' (self-service)', person: 'jaime', type: 'food' },
+      { time: '09:00', title: 'Sara breakfast', sub: macroStr(SARA_MACROS), person: 'sara', type: 'food' },
+      { time: '10:00', title: 'Tanning session', sub: 'Last SF sun session!', person: 'sara', type: 'leisure' },
+      { time: '11:00', title: 'Final SF tourism', sub: 'Whatever\'s left on the list', person: 'both', type: 'leisure' },
+      { time: '13:00', title: 'Lunch at home', sub: 'Sara cooks · light pre-travel day meal', person: 'both', type: 'food' },
+      { time: '16:00', title: 'Pack everything', sub: 'Flying tomorrow early', person: 'both', type: 'leisure' },
+      { time: '20:00', title: 'Dinner at home', sub: 'Sara cooks', person: 'both', type: 'food' },
+    ]
+  },
+];
+
+const DAYS_RETURN = [
+  {
+    date: 22, name: 'Thursday', tags: ['travel'],
+    blocks: [
+      { time: '05:00', title: 'Leave for SFO', sub: 'Head to airport early', person: 'both', type: 'travel' },
+      { time: '06:30', title: 'Check in bags & security', sub: 'SFO terminal', person: 'both', type: 'travel' },
+      { time: '~08:00', title: 'Flight SFO → MIA', sub: 'Connecting to Barcelona same day ⚠️ confirm!', person: 'both', type: 'travel' },
+      { time: 'MIA layover', title: 'Miami layover', sub: 'Quick stop — immigration/transit', person: 'both', type: 'travel' },
+      { time: 'Afternoon', title: 'Flight MIA → BCN', sub: 'Long haul home 🏠 ⚠️ confirm times!', person: 'both', type: 'travel' },
+      { time: 'In-flight', title: 'Meals on the plane', sub: 'Airplane food — track as best you can!', person: 'both', type: 'food' },
+    ],
+    note: '⚠️ Update all return flight times when confirmed!'
+  }
+];
+
+const TYPE_COLORS = {
+  travel: 'b-travel', work: 'b-work', food: 'b-food', social: 'b-social', leisure: 'b-leisure', family: 'b-sara'
+};
+
+let activePeople = { sara: true, jaime: true };
+let activeTypes = { travel: true, work: true, food: true, social: true, leisure: true, family: true };
+
+function togglePerson(p, el) {
+  activePeople[p] = !activePeople[p];
+  el.className = 'pill ' + (activePeople[p] ? 'active-' + p : '');
+  render();
+}
+
+function toggleType(t, el) {
+  activeTypes[t] = !activeTypes[t];
+  el.className = 'pill ' + (activeTypes[t] ? 'active-filter' : '');
+  render();
+}
+
+function blockVisible(block) {
+  if (!activeTypes[block.type]) return false;
+  if (block.person === 'both') return activePeople.sara || activePeople.jaime;
+  if (block.person === 'sara') return activePeople.sara;
+  if (block.person === 'jaime') return activePeople.jaime;
+  return true;
+}
+
+function personBadge(p) {
+  if (p === 'sara') return '<span class="block-person b-sara">Sara</span>';
+  if (p === 'jaime') return '<span class="block-person b-jaime">Jaime</span>';
+  return '<span class="block-person b-both">Both</span>';
+}
+
+function renderDays(days, gridId) {
+  const grid = document.getElementById(gridId);
+  grid.innerHTML = '';
+  days.forEach(day => {
+    const visibleBlocks = day.blocks.filter(blockVisible);
+    if (visibleBlocks.length === 0) return;
+    const tagHtml = (day.tags || []).map(t => {
+      const cls = t === 'travel' ? 'tag-travel' : t === 'work-sara' ? 'tag-work-sara' : t === 'work-jaime' ? 'tag-work-jaime' : t === 'family' ? 'tag-family' : t === 'social' ? 'tag-social' : t === 'free' ? 'tag-free' : 'tag-leisure';
+      const label = t === 'work-sara' ? 'Sara works' : t === 'work-jaime' ? 'Jaime works' : t;
+      return `<span class="tag ${cls}">${label}</span>`;
+    }).join('');
+    const blocksHtml = visibleBlocks.map(b => {
+      const colorClass = TYPE_COLORS[b.type] || 'b-both';
+      const noteHtml = b.note ? `<div class="block-sub" style="color: var(--color-text-tertiary); font-style: italic;">${b.note}</div>` : '';
+      return `<div class="block">
+        <span class="block-time">${b.time}</span>
+        <div class="block-content">
+          <div class="block-title">${b.title}</div>
+          <div class="block-sub">${b.sub}</div>
+          ${noteHtml}
+        </div>
+        ${personBadge(b.person)}
+      </div>`;
+    }).join('');
+    const noteHtml = day.note ? `<div class="note">${day.note}</div>` : '';
+    grid.innerHTML += `<div class="day-card">
+      <div class="day-header">
+        <span class="day-num">${day.date}</span>
+        <div>
+          <div style="font-weight: 500; font-size: 13px; color: var(--color-text-primary);">May</div>
+          <div class="day-name">${day.name}</div>
+        </div>
+        <div class="day-tags">${tagHtml}</div>
+      </div>
+      <div class="blocks">${blocksHtml}</div>
+      ${noteHtml}
+    </div>`;
+  });
+}
+
+function render() {
+  renderDays(DAYS_MIAMI, 'days-grid');
+  renderDays(DAYS_SF, 'sf-grid');
+  renderDays(DAYS_RETURN, 'return-grid');
+}
+
+render();
+</script>
