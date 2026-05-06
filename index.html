@@ -174,7 +174,7 @@ const J=['198g P','~330g C','~90g F','3,000 kcal'];
 
 const MIAMI=[
   {date:8,wd:'Friday',tags:['flight','wsara'],blocks:[
-    {t:'12:00',title:'Pack & final prep',sub:'Last chance to sort bags before leaving',who:'both',type:'leisure'},
+    {t:'12:00',title:'Pack & final prep',sub:'Last chance to sort bags before leaving',who:'both',type:'flight'},
     {t:'14:00',title:'Leave home for El Prat',sub:'Allow time for taxi + check-in',who:'both',type:'flight'},
     {t:'~16:30',title:'Flight BCN → MIA departs',sub:'Approx. 10h · arrives ~10:30 PM Miami time ⚠️ confirm!',who:'both',type:'flight'},
   ]},
@@ -232,7 +232,8 @@ const MIAMI=[
     {t:'09:00',title:'Jaime — Gym',sub:'60 min strength session 🏋️',who:'jaime',type:'workout'},
     {t:'14:00',title:'Leave for MIA airport',sub:'Allow time for check-in & security · AA 2035',who:'both',type:'flight'},
     {t:'17:37',title:'Flight MIA → SFO departs',sub:'AA 2035 · arrives 8:56 PM SF time',who:'both',type:'flight'},
-    {t:'15:30 🇪🇸',title:'Anima con Nuria Basi',sub:'Meeting · Spain time = 6:30 AM Pacific — in-flight!',who:'sara',type:'meeting',note:'Check if WiFi works on the plane or reschedule'},
+    {t:'09:30',title:'Anima con Nuria Basi',sub:'15:30 Spain = 9:30 AM Miami — join before heading to airport!',who:'sara',type:'meeting'},
+    {t:'12:00',title:'Founders Forum · Seb',sub:'18:00 Spain = 12:00 PM Miami — wrap up before leaving for airport',who:'sara',type:'meeting'},
   ]},
 ];
 
@@ -311,7 +312,7 @@ const SF=[
     {t:'10:30',title:'Last chance: David & Moustafa',sub:"See whoever hasn't been seen yet!",who:'sara',type:'social'},
     {t:'12:00',title:'Jaime work ends',sub:'8h complete',who:'jaime',type:'work'},
     {t:'13:00',title:'Lunch at home',sub:'Sara cooks',who:'both',type:'food',sm:S,jm:J},
-    {t:'15:00',title:'Pack & prep for return',sub:'Flying out May 22 — start organizing',who:'both',type:'leisure'},
+    {t:'15:00',title:'Pack & prep for return',sub:'Flying out May 22 — start organizing',who:'both',type:'flight'},
     {t:'19:30',title:'Dinner out',sub:'Last SF dinner — make it special! ✨',who:'both',type:'food'},
   ]},
   {date:20,wd:'Wednesday',tags:['wjaime','free'],blocks:[
@@ -337,7 +338,7 @@ const SF=[
     {t:'11:00',title:'Final SF tourism',sub:"Whatever's left on the list",who:'sara',type:'leisure'},
     {t:'12:00',title:'Jaime work ends',sub:'8h complete',who:'jaime',type:'work'},
     {t:'13:00',title:'Lunch at home',sub:'Sara cooks · light, pre-travel day',who:'both',type:'food',sm:S,jm:J},
-    {t:'16:00',title:'Pack everything',sub:'Flying tomorrow at noon — no early start needed!',who:'both',type:'leisure'},
+    {t:'16:00',title:'Pack everything',sub:'Flying tomorrow at noon — no early start needed!',who:'both',type:'flight'},
     {t:'20:00',title:'Dinner at home',sub:'Sara cooks · easy, no stress',who:'both',type:'food',sm:S,jm:J},
   ]},
 ];
@@ -351,12 +352,17 @@ const RET=[
 ];
 
 const BUCKET = [
+  { id:'midnight',  text:'Never Ending Midnight Sun 🌅',      sub:'' },
   { id:'luma',      text:"Luma Events 🎉",                    sub:'Check lu.ma for SF events during the trip' },
   { id:'tram',      text:'Cable Car 🚃',                      sub:'Ride the iconic Powell-Hyde line' },
   { id:'gg',        text:'Golden Gate Bridge 🌁',              sub:'Walk across + views from Battery Spencer' },
   { id:'yosemite',  text:'Yosemite 🏔',                        sub:'Full day trip — book Extranomical bus!' },
   { id:'alcatraz',  text:'Alcatraz 🏝',                        sub:'Book at alcatrazcruises.com in advance' },
   { id:'fishermans',text:"Fisherman's Wharf + Exploratorium 🦀🔬", sub:'Clam chowder bread bowl + Pier 15 interactive science museum — same street' },
+  { id:'painted',   text:'Painted Ladies 🏘',                  sub:'Alamo Square — the postcard view of SF' },
+  { id:'palace',    text:'Palace of Fine Arts 🏛',             sub:'Beautiful rotunda 10 min from Golden Gate' },
+  { id:'chinatown', text:'Chinatown 🥢',                       sub:'Oldest in North America — dim sum & wonton soup' },
+  { id:'ggpark',    text:'Golden Gate Park 🌳',                sub:'Huge park — rent bikes, stumble on the buffalo' },
   { id:'disney',    text:'Walt Disney Family Museum 🏰',        sub:'In the Presidio — 10 min walk from Golden Gate' },
   { id:'calacademy',text:'California Academy of Sciences 🌿',  sub:'Golden Gate Park — rainforest dome + planetarium + aquarium in one' },
   { id:'sfmoma',    text:'SFMOMA 🎨',                          sub:'Downtown — best on a rainy weekday afternoon' },
