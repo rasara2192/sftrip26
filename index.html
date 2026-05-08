@@ -181,7 +181,6 @@ const MIAMI=[
   {date:9,wd:'Saturday',tags:['social','free'],blocks:[
     {t:'~01:00',title:'Arrive & settle in',sub:"Unpack minimally, crash — it's late!",who:'both',type:'leisure'},
     {t:'09:30',title:'Jaime breakfast',sub:'Self-service — first Miami morning!',who:'jaime',type:'food',jm:J},
-    {t:'10:00',title:'Sara breakfast',sub:'Weekend pace',who:'sara',type:'food',sm:S},
     {t:'10:30',title:'Sara — Run',sub:'40 min easy run 🏃‍♀️',who:'sara',type:'workout'},
     {t:'13:00',title:'Jaime — Bike',sub:'1.5–2h ride 🚴',who:'jaime',type:'workout'},
     {t:'11:00',title:'Tanning session',sub:'Min. 30 min · beach or pool',who:'sara',type:'leisure'},
@@ -191,7 +190,6 @@ const MIAMI=[
   ]},
   {date:10,wd:'Sunday',tags:['free'],blocks:[
     {t:'09:00',title:'Jaime breakfast',sub:'Self-service',who:'jaime',type:'food',jm:J},
-    {t:'09:30',title:'Sara breakfast',sub:'',who:'sara',type:'food',sm:S},
     {t:'10:00',title:'Sara — Run',sub:'40 min easy run 🏃‍♀️',who:'sara',type:'workout'},
     {t:'13:00',title:'Jaime — Gym',sub:'60 min strength session 🏋️',who:'jaime',type:'workout'},
     {t:'10:30',title:'Tanning session',sub:'Min. 30 min · beach or pool',who:'sara',type:'leisure'},
@@ -202,22 +200,16 @@ const MIAMI=[
   {date:11,wd:'Monday',tags:['wsara','wjaime'],blocks:[
     {t:'06:00',title:'Jaime work begins',sub:'8h · 06:00–14:00 Miami = 12:00–20:00 Spain',who:'jaime',type:'work'},
     {t:'07:00',title:'Jaime breakfast',sub:'Self-service · at desk',who:'jaime',type:'food',jm:J},
-    {t:'09:00',title:'Sara work begins',sub:'8h day incl. lunch · remote',who:'sara',type:'work'},
-    {t:'09:30',title:'Sara breakfast',sub:'Quick, at desk',who:'sara',type:'food',sm:S},
     {t:'10:00',title:'Sara — Gym · Glutes 🍑',sub:'1.5h session',who:'sara',type:'workout'},
     {t:'13:00',title:'Jaime — Gym',sub:'60 min strength session 🏋️',who:'jaime',type:'workout'},
     {t:'13:00',title:'Lunch together',sub:'Sara cooks · both take a break',who:'both',type:'food',sm:S,jm:J},
     {t:'14:00',title:'Jaime work ends',sub:'8h complete',who:'jaime',type:'work'},
-    {t:'14:30',title:'Jaime: afternoon free',sub:'Beach, explore, chill',who:'jaime',type:'leisure'},
-    {t:'17:00',title:'Sara work ends',sub:'8h complete',who:'sara',type:'work'},
-    {t:'17:30',title:'Tanning session',sub:'Min. 30 min',who:'sara',type:'leisure'},
-    {t:'20:00',title:'Dinner at home',sub:'Sara cooks',who:'both',type:'food',sm:S,jm:J},
+    {t:'14:00',title:'Lunch & boat 🛥',sub:'Just the two of you — afternoon on the water til sunset',who:'both',type:'social'},
   ]},
   {date:12,wd:'Tuesday',tags:['wjaime','social','free'],blocks:[
     {t:'06:00',title:'Jaime work begins',sub:'8h · 06:00–14:00 Miami = 12:00–20:00 Spain',who:'jaime',type:'work'},
     {t:'07:00',title:'Jaime breakfast',sub:'Self-service · at desk',who:'jaime',type:'food',jm:J},
     {t:'09:00',title:'Sara: free morning',sub:'Last Miami day — errands, pack for SF',who:'sara',type:'leisure'},
-    {t:'09:30',title:'Sara breakfast',sub:'Relaxed pace',who:'sara',type:'food',sm:S},
     {t:'10:00',title:'Sara — Yin Yoga or Bike with Jaime 🧘‍♀️🚴',sub:'Tap to open yoga video',who:'sara',type:'workout',url:'https://www.youtube.com/watch?v=J8vj0H0L2Uw'},
     {t:'13:00',title:'Jaime — Bike',sub:'1.5–2h ride 🚴',who:'jaime',type:'workout'},
     {t:'10:30',title:'Tanning session',sub:'Min. 30 min · last Miami sun!',who:'sara',type:'leisure'},
@@ -245,12 +237,11 @@ const SF=[
   {date:14,wd:'Thursday',tags:['wjaime','free'],blocks:[
     {t:'04:00',title:'Jaime work begins',sub:'8h · 4:00–12:00 SF = 1:00–9:00 PM Spain',who:'jaime',type:'work'},
     {t:'05:00',title:'Jaime breakfast',sub:'Self-service · pre-dawn hustle',who:'jaime',type:'food',jm:J},
-    {t:'09:30',title:'Sara breakfast',sub:'Relaxed first full SF morning',who:'sara',type:'food',sm:S},
     {t:'10:00',title:'Sara — Yin Yoga or Bike with Jaime 🧘‍♀️🚴',sub:'Tap to open yoga video',who:'sara',type:'workout',url:'https://www.youtube.com/watch?v=J8vj0H0L2Uw'},
     {t:'13:00',title:'Jaime — Bike',sub:'1.5–2h ride 🚴',who:'jaime',type:'workout'},
     {t:'10:30',title:'Tanning session',sub:'Min. 30 min · SF weather is moody — grab it!',who:'sara',type:'leisure'},
+    {t:'11:30',title:'Sara\'s work block',sub:'2–3h · remote from café or home',who:'sara',type:'work'},
     {t:'11:00',title:'⚠️ Book Yosemite bus!',sub:'extranomical.com — day trip for Sat May 16',who:'both',type:'social',note:'Books up fast — do this today!'},
-    {t:'11:00',title:'Sara: free day',sub:'Explore SF solo, recover from travel',who:'sara',type:'leisure'},
     {t:'12:00',title:'Jaime work ends',sub:'8h complete',who:'jaime',type:'work'},
     {t:'13:00',title:'Lunch at home',sub:'Sara cooks · together',who:'both',type:'food',sm:S,jm:J},
     {t:'15:00',title:'Explore SF together',sub:'First real day in the city!',who:'both',type:'leisure'},
@@ -259,11 +250,10 @@ const SF=[
   {date:15,wd:'Friday',tags:['wjaime','social'],blocks:[
     {t:'04:00',title:'Jaime work begins',sub:'8h · 4:00–12:00 SF = 1:00–9:00 PM Spain',who:'jaime',type:'work'},
     {t:'05:00',title:'Jaime breakfast',sub:'Self-service',who:'jaime',type:'food',jm:J},
-    {t:'09:30',title:'Sara breakfast',sub:'',who:'sara',type:'food',sm:S},
     {t:'10:00',title:'Sara — Gym · Legs 🦵',sub:'1.5h session',who:'sara',type:'workout'},
     {t:'13:00',title:'Jaime — Gym',sub:'60 min strength session 🏋️',who:'jaime',type:'workout'},
     {t:'10:00',title:'Tanning session',sub:'Min. 30 min',who:'sara',type:'leisure'},
-    {t:'11:00',title:'Sara: see David or Moustafa',sub:'Morning catch-up while Jaime works',who:'sara',type:'social'},
+    {t:'11:30',title:'Sara\'s work block',sub:'2–3h · remote from café or home',who:'sara',type:'work'},
     {t:'12:00',title:'Jaime work ends',sub:'8h complete',who:'jaime',type:'work'},
     {t:'13:00',title:'Lunch at home',sub:'Sara cooks',who:'both',type:'food',sm:S,jm:J},
     {t:'14:30',title:'Alcatraz 🏝',sub:'Ferry from Pier 33 · audio tour · ~3h total',who:'both',type:'tourism'},
@@ -280,7 +270,6 @@ const SF=[
   ]},
   {date:17,wd:'Sunday',tags:['free'],blocks:[
     {t:'09:00',title:'Jaime breakfast',sub:'Self-service',who:'jaime',type:'food',jm:J},
-    {t:'09:30',title:'Sara breakfast',sub:'',who:'sara',type:'food',sm:S},
     {t:'10:00',title:'Sara — Run',sub:'40 min easy run 🏃‍♀️',who:'sara',type:'workout'},
     {t:'13:00',title:'Jaime — Gym',sub:'60 min strength session 🏋️',who:'jaime',type:'workout'},
     {t:'11:00',title:'Tanning session',sub:'Min. 30 min',who:'sara',type:'leisure'},
@@ -292,11 +281,10 @@ const SF=[
   {date:18,wd:'Monday',tags:['wjaime','free'],blocks:[
     {t:'04:00',title:'Jaime work begins',sub:'8h · 04:00–12:00 SF = 13:00–21:00 Spain',who:'jaime',type:'work'},
     {t:'05:00',title:'Jaime breakfast',sub:'Self-service',who:'jaime',type:'food',jm:J},
-    {t:'09:30',title:'Sara breakfast',sub:'',who:'sara',type:'food',sm:S},
     {t:'10:00',title:'Sara — Gym · Glutes 🍑',sub:'1.5h session',who:'sara',type:'workout'},
     {t:'13:00',title:'Jaime — Gym',sub:'60 min strength session 🏋️',who:'jaime',type:'workout'},
     {t:'10:00',title:'Tanning session',sub:'Min. 30 min',who:'sara',type:'leisure'},
-    {t:'11:00',title:'Sara: free morning',sub:"Last days — fill with what's left",who:'sara',type:'leisure'},
+    {t:'11:30',title:'Sara\'s work block',sub:'2–3h · remote from café or home',who:'sara',type:'work'},
     {t:'12:00',title:'Jaime work ends',sub:'8h complete',who:'jaime',type:'work'},
     {t:'13:00',title:'Lunch at home',sub:'Sara cooks',who:'both',type:'food',sm:S,jm:J},
     {t:'15:00',title:'Afternoon together',sub:'Tourism, neighbourhoods',who:'both',type:'leisure'},
@@ -305,11 +293,11 @@ const SF=[
   {date:19,wd:'Tuesday',tags:['wjaime','social'],blocks:[
     {t:'04:00',title:'Jaime work begins',sub:'8h · 04:00–12:00 SF = 13:00–21:00 Spain',who:'jaime',type:'work'},
     {t:'05:00',title:'Jaime breakfast',sub:'Self-service',who:'jaime',type:'food',jm:J},
-    {t:'09:30',title:'Sara breakfast',sub:'',who:'sara',type:'food',sm:S},
     {t:'10:00',title:'Sara — Yin Yoga or Bike with Jaime 🧘‍♀️🚴',sub:'Tap to open yoga video',who:'sara',type:'workout',url:'https://www.youtube.com/watch?v=J8vj0H0L2Uw'},
     {t:'13:00',title:'Jaime — Bike',sub:'1.5–2h ride 🚴',who:'jaime',type:'workout'},
     {t:'10:00',title:'Tanning session',sub:'Min. 30 min',who:'sara',type:'leisure'},
-    {t:'10:30',title:'Last chance: David & Moustafa',sub:"See whoever hasn't been seen yet!",who:'sara',type:'social'},
+    {t:'11:30',title:'Sara\'s work block',sub:'2–3h · remote from café or home',who:'sara',type:'work'},
+    {t:'11:00',title:'Last chance: David & Moustafa',sub:"See whoever hasn't been seen yet!",who:'sara',type:'social'},
     {t:'12:00',title:'Jaime work ends',sub:'8h complete',who:'jaime',type:'work'},
     {t:'13:00',title:'Lunch at home',sub:'Sara cooks',who:'both',type:'food',sm:S,jm:J},
     {t:'15:00',title:'Pack & prep for return',sub:'Flying out May 22 — start organizing',who:'both',type:'flight'},
@@ -318,11 +306,10 @@ const SF=[
   {date:20,wd:'Wednesday',tags:['wjaime','free'],blocks:[
     {t:'04:00',title:'Jaime work begins',sub:'8h · 04:00–12:00 SF = 13:00–21:00 Spain',who:'jaime',type:'work'},
     {t:'05:00',title:'Jaime breakfast',sub:'Self-service',who:'jaime',type:'food',jm:J},
-    {t:'09:30',title:'Sara breakfast',sub:'',who:'sara',type:'food',sm:S},
     {t:'10:00',title:'Sara — Gym · Guns 💪',sub:'1.5h session',who:'sara',type:'workout'},
     {t:'13:00',title:'Jaime — Gym',sub:'60 min strength session 🏋️',who:'jaime',type:'workout'},
     {t:'10:00',title:'Tanning session',sub:'Min. 30 min',who:'sara',type:'leisure'},
-    {t:'11:00',title:'Sara: free morning',sub:'Tourism, errands, chill',who:'sara',type:'leisure'},
+    {t:'11:30',title:'Sara\'s work block',sub:'2–3h · remote from café or home',who:'sara',type:'work'},
     {t:'12:00',title:'Jaime work ends',sub:'8h complete',who:'jaime',type:'work'},
     {t:'13:00',title:'Lunch at home',sub:'Sara cooks',who:'both',type:'food',sm:S,jm:J},
     {t:'15:00',title:'Afternoon in SF',sub:"Whatever's left on the list",who:'both',type:'leisure'},
@@ -331,11 +318,10 @@ const SF=[
   {date:21,wd:'Thursday',tags:['wjaime','free'],blocks:[
     {t:'04:00',title:'Jaime work begins',sub:'8h · 04:00–12:00 SF = 13:00–21:00 Spain',who:'jaime',type:'work'},
     {t:'05:00',title:'Jaime breakfast',sub:'Self-service · last SF workday',who:'jaime',type:'food',jm:J},
-    {t:'09:30',title:'Sara breakfast',sub:'Last SF morning!',who:'sara',type:'food',sm:S},
     {t:'10:00',title:'Sara — Yin Yoga or Bike with Jaime 🧘‍♀️🚴',sub:'Tap to open yoga video',who:'sara',type:'workout',url:'https://www.youtube.com/watch?v=J8vj0H0L2Uw'},
     {t:'13:00',title:'Jaime — Bike',sub:'1.5–2h ride 🚴',who:'jaime',type:'workout'},
     {t:'10:30',title:'Tanning session',sub:'Last SF sun — soak it up!',who:'sara',type:'leisure'},
-    {t:'11:00',title:'Final SF tourism',sub:"Whatever's left on the list",who:'sara',type:'leisure'},
+    {t:'11:30',title:'Sara\'s work block',sub:'2–3h · remote from café or home',who:'sara',type:'work'},
     {t:'12:00',title:'Jaime work ends',sub:'8h complete',who:'jaime',type:'work'},
     {t:'13:00',title:'Lunch at home',sub:'Sara cooks · light, pre-travel day',who:'both',type:'food',sm:S,jm:J},
     {t:'16:00',title:'Pack everything',sub:'Flying tomorrow at noon — no early start needed!',who:'both',type:'flight'},
@@ -437,11 +423,13 @@ function toggleT(t, el){
 }
 
 function bVis(b){
+  // type filter
   if(activeType){
     const typeMap = {meeting:'work'};
     const btype = typeMap[b.type] || b.type;
     if(btype !== activeType) return false;
   }
+  // person filter — 'both' blocks always show regardless of person filter
   if(activePerson){
     if(b.who !== activePerson && b.who !== 'both') return false;
   }
